@@ -1,6 +1,6 @@
 To run this:
 
-Firstly install all the build-essentials
+First install all the build-essentials
 sudo dnf install make automake gcc gcc-c++ kernel-devel git wget qemu gdb
 
 1. Install gcc-10 using brew.
