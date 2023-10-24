@@ -239,9 +239,9 @@ type(char* path) {
   for (int i = 0; i < 10; i++) {
     if (strcmp(filenames[i], "......") != 0) {
       if (strcmp(filenames[i], "") == 0) {
-        strcpy(filenames[i], "Exes");
+        strcpy(filenames[i], "exes");
       }
-      printf(1, "Filetype: %s\t\t\tCount: %d\n", filenames[i], count[i]);
+      printf(1, "%d. Filetype: %s  Count: %d\n",i+1, filenames[i], count[i]);
     }
   }
 }
