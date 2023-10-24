@@ -186,8 +186,14 @@ UPROGS=\
 	_hello\
 	_dls\
 
-fs.img: mkfs README $(UPROGS)
-	./mkfs fs.img README $(UPROGS)
+hello.py: 
+	touch hello.py
+
+temp.c:
+	touch temp.c
+
+fs.img: mkfs README $(UPROGS) hello.py temp.c
+	./mkfs fs.img README hello.py temp.c $(UPROGS)
 
 -include *.d
 
@@ -195,7 +201,7 @@ clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs \
-	xv6memfs.img mkfs .gdbinit \
+	xv6memfs.img mkfs .gdbinit hello.py temp.c \
 	$(UPROGS)
 
 # make a printout

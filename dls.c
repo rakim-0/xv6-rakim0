@@ -3,6 +3,8 @@
 #include "user.h"
 #include "fs.h"
 
+#define NUM_FILES 50
+
 char*
 fmtname(char *path)
 {
@@ -149,10 +151,48 @@ getDepth(char *path, int depth) {
   return depthret;
 }
 
+char filenames[NUM_FILES][20];
+int count[NUM_FILES];
+int checkType(char *name) {
+  while(*name && *name != '.') {
+    name++;
+  }
+  char buf[20];
+  int i = 0;
+  while(*name) {
+    buf[i] = *name;
+    i++;
+    name++;
+  }
+  buf[i] = '\0';
+  
+  int found = 0;
+  for (int i = 0; i < NUM_FILES; i++) {
+    if (strcmp(filenames[i], buf) == 0) {
+        count[i]++;
+        found = 1;
+    }
+  }
+  if (!found) {
+    for (int i = 0; i < NUM_FILES; i++) {
+      if (strcmp(filenames[i],  "......") == 0) {
+        strcpy(filenames[i], buf);
+        count[i]++;
+        found = 1;
+        break;
+      }
+    }
+  }
+  return 0;
+}
 
 void
 type(char* path) {
-  char buf[512], *p;
+  for (int i = 0; i < NUM_FILES; i++) {
+    strcpy(filenames[i],  "......");
+    count[i] = 0;
+  }
+  char buf[20], *p;
   int fd;
   struct dirent de;
   struct stat st;
@@ -191,10 +231,21 @@ type(char* path) {
         printf(1, "dls: cannot stat %s\n", buf);
         continue;
       }
+      // printf(1, "%s\n", p);
+      checkType(p);
     }
     break;
   }
+  for (int i = 0; i < 10; i++) {
+    if (strcmp(filenames[i], "......") != 0) {
+      if (strcmp(filenames[i], "") == 0) {
+        strcpy(filenames[i], "Exes");
+      }
+      printf(1, "Filetype: %s\t\t\tCount: %d\n", filenames[i], count[i]);
+    }
+  }
 }
+
 
 int
 main(int argc, char *argv[])
@@ -214,7 +265,7 @@ main(int argc, char *argv[])
       printf(1, "Depth of Directory: %d\n", getDepth(argv[2], 0));
   }
   else if (strcmp(argv[1], "-t") == 0) {
-    printf(1, "-t\n");
+    type(".");
   }
   else {
     usage();
