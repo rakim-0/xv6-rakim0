@@ -111,7 +111,7 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
-
+  p->childnum = 0;
   return p;
 }
 
@@ -188,6 +188,8 @@ fork(void)
   if((np = allocproc()) == 0){
     return -1;
   }
+
+  curproc->childnum += 1;
 
   // Copy process state from proc.
   if((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0){
@@ -296,6 +298,7 @@ wait(void)
         p->killed = 0;
         p->state = UNUSED;
         release(&ptable.lock);
+        curproc->childnum--;
         return pid;
       }
     }

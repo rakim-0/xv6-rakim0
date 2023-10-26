@@ -83,9 +83,14 @@ int
 sys_uptime(void)
 {
   uint xticks;
-
   acquire(&tickslock);
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int 
+sys_childcount(void){
+  struct proc *curproc = myproc();
+  return curproc->childnum;
 }
