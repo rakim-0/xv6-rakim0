@@ -94,3 +94,37 @@ sys_childcount(void){
   struct proc *curproc = myproc();
   return curproc->childnum;
 }
+
+void
+sys_nfork(void){
+  int n;
+  argint(0, &n);
+  int s;
+  argint(1, &s);
+  char* str = (char *) s;
+  // cprintf("%d\n", n);
+  // cprintf("%s\n", str);
+  char args[n][10];
+  int i = 0;
+  int j = 0;
+  while (i < n && *str) {
+    if (*str == ';') {
+      args[i][j] = '\0';
+      i++;
+      str++;
+      j = 0;
+      if (!(*str)) {
+        break;
+      }
+    }
+    args[i][j] = *str;
+    str++;
+    j++;
+  }
+  for (int i = 0; i < n; i++) {
+    int pid = fork();
+    cprintf("Child %d: \n", i+1);
+    cprintf("PID: %d\t\tArgument/Sequence Number:%s\n\n", pid, args[i]);
+    wait();
+  }
+}
