@@ -4,13 +4,13 @@
 int main(void) {
     int pid = fork();
     if (pid == 0) {
-        // printf(1, "Hello from child!\n");
+        printf(1, "Hello from child!\n");
         sleep(1);
         exit();
     }
     pid = fork();
     if (pid == 0) {
-        // printf(1, "Hello from child!\n");
+        printf(1, "Hello from child!\n");
         sleep(1);
         exit();
     }
